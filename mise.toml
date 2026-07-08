@@ -1,2 +1,8 @@
+[settings]
+experimental = true
+
 [tools]
 node = "lts"
+
+[hooks]
+postinstall = "if [ -z \"${CI:-}\" ] && git rev-parse --git-dir > /dev/null 2>&1; then npm ci; npx lefthook install; fi"

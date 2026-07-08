@@ -1,0 +1,6 @@
+pre-commit:
+  parallel: true
+  commands:
+    oxfmt:
+      glob: "*.{js,mjs}"
+      run: npm exec oxfmt -- {staged_files} --write
