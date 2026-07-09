@@ -4,3 +4,4 @@ pre-commit:
     oxfmt:
       glob: "*.{js,mjs}"
       run: npm exec oxfmt -- {staged_files} --write
+      stage_fixed: true
