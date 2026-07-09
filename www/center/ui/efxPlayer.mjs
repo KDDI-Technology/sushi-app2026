@@ -20,7 +20,7 @@ class efxPlayer {
     this.path = null;
     this.loaded = false;
     this.samplers = [];
-    this.sapmlers2 = [];
+    this.samplers2 = [];
     this.context = context;
     this.context.resume();
     this.gain = 0.5;

@@ -1,6 +1,6 @@
 // ui-ranking-center.mjs
-// umakamon app user ranking UI for center app
-// (C)2025 by KDDI Technology
+// sushi app user ranking UI for center app
+// (C)2026 by KDDI Technology
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
 import avatar from "/libs/animal-avatar-generator.esm.js";
@@ -195,10 +195,10 @@ const centerRow = `
   </div>
 `;
 
-const TICKER_TIME = 1000; // update ticker timer 
+const TICKER_TIME = 1000; // update ticker timer
 
-class uiRankingCenter{
-  constructor(dom,socket){
+class uiRankingCenter {
+  constructor(dom, socket) {
     this.dom = dom;
     this.shadow = this.dom.attachShadow({ mode: "open" });
     this.socket = socket;
@@ -206,7 +206,7 @@ class uiRankingCenter{
     this.updateTimer = null;
     this.template = null;
   }
-  async init(){
+  async init() {
     this.shadow.appendChild(this.#makeDomFromTemplate(html));
     this.$main = this.shadow.querySelector("#uiRankWrap");
     this.$body = this.$main.querySelector(".uiRankBody");
@@ -217,63 +217,63 @@ class uiRankingCenter{
     this.$cTicker = this.$cMain.querySelector("#uiRankCenterUpdateTicker");
 
     this.$toggle.onclick = () => {
-      if(this.status == "hide"){
+      if (this.status == "hide") {
         this.show();
-      }else{
+      } else {
         this.hide();
       }
     };
-    this.socket.on("rankingUpdate",(data)=>{
+    this.socket.on("rankingUpdate", (data) => {
       this.#updateView(data);
     });
     await this.#updateRanking();
     await this.#updateCenterScores();
   }
-  click(){
+  click() {
     this.$toggle.click();
   }
-  hide(){
+  hide() {
     this.$main.classList.add("hide");
     this.$cMain.classList.add("hide");
     this.$main.classList.remove("RkShow");
     this.$cMain.classList.remove("RkShow");
     this.status = "hide";
   }
-  show(){
+  show() {
     this.$main.classList.remove("hide");
     this.$cMain.classList.remove("hide");
     this.$main.classList.add("RkShow");
     this.$cMain.classList.add("RkShow");
     this.status = "show";
   }
-  updateCenterScores(scores){
+  updateCenterScores(scores) {
     this.#updateCenterView(scores);
   }
-  async #updateRanking(){
+  async #updateRanking() {
     const ranking = await this.#getRanking();
     this.#updateView(ranking);
   }
-  async #updateCenterScores(){
+  async #updateCenterScores() {
     const scores = await this.#getCenterScores();
     this.#updateCenterView(scores);
   }
-  #updateView(ranking){
-//    console.log("_updateView()");
-//    console.dir(ranking);
+  #updateView(ranking) {
+    //    console.log("_updateView()");
+    //    console.dir(ranking);
     const fragment = new DocumentFragment();
     this.#startUpdateTicker("guest");
-    if(ranking != null){
-      const rankNum = (ranking.users.length > 3)? 3 : ranking.users.length;
-      for(let cnt=0;cnt<rankNum;cnt ++){
-        const rank = cnt+1;
+    if (ranking != null) {
+      const rankNum = ranking.users.length > 3 ? 3 : ranking.users.length;
+      for (let cnt = 0; cnt < rankNum; cnt++) {
+        const rank = cnt + 1;
         const icon = ranking.users[cnt].icon;
         const name = ranking.users[cnt].name;
         const score = ranking.users[cnt].score;
-        const $row = this.#makeRowDom(rank,icon,name,score);
-        if(cnt==0){
+        const $row = this.#makeRowDom(rank, icon, name, score);
+        if (cnt == 0) {
           $row.children[0].classList.add("uiRankRowTop");
         }
-        if(cnt==(rankNum-1)){
+        if (cnt == rankNum - 1) {
           $row.children[0].classList.add("uiRankRowBottom");
         }
         fragment.appendChild($row);
@@ -281,7 +281,7 @@ class uiRankingCenter{
       this.$body.replaceChildren(fragment);
     }
   }
-  #makeRowDom(rank,icon,name,score){
+  #makeRowDom(rank, icon, name, score) {
     const svg = this.#genIcon(icon);
     const $row = this.#makeDomFromTemplate(htmlRow);
     const $rank = $row.querySelector(".uiRankRank");
@@ -297,22 +297,22 @@ class uiRankingCenter{
     $score.innerHTML = score;
     return $row;
   }
-  #updateCenterView(scores){
+  #updateCenterView(scores) {
     console.log("#updateCenterView()");
     console.dir(scores);
     const fragment = new DocumentFragment();
     this.#startUpdateTicker("center");
-    if(scores != null){
-      const num = (scores.length > 10)? 10 : scores.length;
-      for(let cnt=0;cnt<num;cnt ++){
-        const rank = cnt+1;
+    if (scores != null) {
+      const num = scores.length > 10 ? 10 : scores.length;
+      for (let cnt = 0; cnt < num; cnt++) {
+        const rank = cnt + 1;
         const time = scores[cnt].time;
         const score = scores[cnt].score;
-        const $row = this.#makeCenterRowDom(rank,time,score);
-        if(cnt==0){
+        const $row = this.#makeCenterRowDom(rank, time, score);
+        if (cnt == 0) {
           $row.children[0].classList.add("uiRankRowTop");
         }
-        if(cnt==(num-1)){
+        if (cnt == num - 1) {
           $row.children[0].classList.add("uiRankRowBottom");
         }
         fragment.appendChild($row);
@@ -320,7 +320,7 @@ class uiRankingCenter{
       this.$cBody.replaceChildren(fragment);
     }
   }
-  #makeCenterRowDom(rank,time,score){
+  #makeCenterRowDom(rank, time, score) {
     const $row = this.#makeDomFromTemplate(centerRow);
     const $rank = $row.querySelector(".uiRankRank");
     const $time = $row.querySelector(".uiRankTime");
@@ -331,52 +331,52 @@ class uiRankingCenter{
     return $row;
   }
   #makeDomFromTemplate(template) {
-    const t = document.createElement('template');
+    const t = document.createElement("template");
     t.innerHTML = template.trim();
     return t.content.cloneNode(true);
   }
-  async #getRanking(){
+  async #getRanking() {
     try {
-      const res = await this.socket.timeout(3000).emitWithAck("getRankingFromMaster",null);
+      const res = await this.socket.timeout(3000).emitWithAck("getRankingFromMaster", null);
       return res;
     } catch (err) {
-      console.error("uiRanking.#getRanking() server error = "+err);
+      console.error("uiRanking.#getRanking() server error = " + err);
       return null;
     }
   }
-  async #getCenterScores(){
+  async #getCenterScores() {
     try {
-      const res = await this.socket.timeout(3000).emitWithAck("getCenterScores",null);
+      const res = await this.socket.timeout(3000).emitWithAck("getCenterScores", null);
       return res;
     } catch (err) {
-      console.error("uiRanking.#getCenterScores() server error = "+err);
+      console.error("uiRanking.#getCenterScores() server error = " + err);
       return null;
     }
   }
 
-  #genIcon(str){
-    const svg = avatar(str, { size: 128, backgroundColors: ['transparent'] ,blackout:false});
+  #genIcon(str) {
+    const svg = avatar(str, { size: 128, backgroundColors: ["transparent"], blackout: false });
     return svg;
   }
-  #startUpdateTicker(type){
-    let $dom = (type == "guest")? this.$ticker : this.$cTicker;
+  #startUpdateTicker(type) {
+    let $dom = type == "guest" ? this.$ticker : this.$cTicker;
     $dom.classList.remove("hide");
-    if(this.updateTimer != null){
+    if (this.updateTimer != null) {
       clearTimeout(this.updateTimer);
       this.updateTimer = null;
     }
-    this.updateTimer = setTimeout(()=>{
+    this.updateTimer = setTimeout(() => {
       $dom.classList.add("hide");
-    },TICKER_TIME);
+    }, TICKER_TIME);
   }
-  #formatDate(ms){
+  #formatDate(ms) {
     const d = new Date(ms);
     const yyyy = d.getFullYear();
-    const mm   = String(d.getMonth() + 1).padStart(2, '0');
-    const dd   = String(d.getDate()).padStart(2, '0');
-    const hh   = String(d.getHours()).padStart(2, '0');
-    const min  = String(d.getMinutes()).padStart(2, '0');
-    const ss   = String(d.getSeconds()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const hh = String(d.getHours()).padStart(2, "0");
+    const min = String(d.getMinutes()).padStart(2, "0");
+    const ss = String(d.getSeconds()).padStart(2, "0");
     return `${yyyy}/${mm}/${dd} ${hh}:${min}:${ss}`;
   }
 }

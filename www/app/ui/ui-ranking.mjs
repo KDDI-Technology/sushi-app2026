@@ -1,6 +1,6 @@
 // ui-ranking.mjs
-// umakamon app user ranking UI
-// (C)2025 by KDDI Technology
+// sushi app user ranking UI
+// (C)2026 by KDDI Technology
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
 import avatar from "/libs/animal-avatar-generator.esm.js";
@@ -163,10 +163,10 @@ const htmlRow = `
   </div>
 `;
 
-const TICKER_TIME = 1000; // update ticker timer 
+const TICKER_TIME = 1000; // update ticker timer
 
-class uiRanking{
-  constructor(dom,socket){
+class uiRanking {
+  constructor(dom, socket) {
     this.dom = dom;
     this.shadow = this.dom.attachShadow({ mode: "open" });
     this.socket = socket;
@@ -174,7 +174,7 @@ class uiRanking{
     this.updateTimer = null;
     this.template = null;
   }
-  async init(){
+  async init() {
     this.shadow.appendChild(this.#makeDomFromTemplate(html));
     this.$main = this.shadow.querySelector("#uiRankWrap");
     this.$header = this.$main.querySelector("#uiRankHeader");
@@ -183,49 +183,49 @@ class uiRanking{
     this.$toggle = this.shadow.querySelector("#uiRankToggle");
     this.$myRank = this.$main.querySelector("#myRank");
     this.$toggle.onclick = () => {
-      if(this.status == "hide"){
+      if (this.status == "hide") {
         this.show();
-      }else{
+      } else {
         this.hide();
       }
     };
-    this.socket.on("rankingUpdate",(data)=>{
+    this.socket.on("rankingUpdate", (data) => {
       this._updateView(data);
     });
     await this.#updateRanking();
   }
-  hide(){
+  hide() {
     this.$main.classList.add("hide");
     this.$main.classList.remove("RkShow");
     this.status = "hide";
   }
-  show(){
+  show() {
     this.$main.classList.remove("hide");
     this.$main.classList.add("RkShow");
     this.status = "show";
   }
-  async #updateRanking(){
+  async #updateRanking() {
     const ranking = await this.#getRanking();
     this._updateView(ranking);
   }
-  _updateView(ranking){
+  _updateView(ranking) {
     console.log("_updateView()");
     console.dir(ranking);
     const fragment = new DocumentFragment();
     this.#startUpdateTicker();
     this.$myRank.innerHTML = ranking.myRank;
-    if(ranking != null){
-      const rankNum = (ranking.users.length > 3)? 3 : ranking.users.length;
-      for(let cnt=0;cnt<rankNum;cnt ++){
-        const rank = cnt+1;
+    if (ranking != null) {
+      const rankNum = ranking.users.length > 3 ? 3 : ranking.users.length;
+      for (let cnt = 0; cnt < rankNum; cnt++) {
+        const rank = cnt + 1;
         const icon = ranking.users[cnt].icon;
         const name = ranking.users[cnt].name;
         const score = ranking.users[cnt].score;
-        const $row = this.#makeRowDom(rank,icon,name,score);
-        if(cnt==0){
+        const $row = this.#makeRowDom(rank, icon, name, score);
+        if (cnt == 0) {
           $row.children[0].classList.add("uiRankRowTop");
         }
-        if(cnt==(rankNum-1)){
+        if (cnt == rankNum - 1) {
           $row.children[0].classList.add("uiRankRowBottom");
         }
         fragment.appendChild($row);
@@ -233,7 +233,7 @@ class uiRanking{
       this.$body.replaceChildren(fragment);
     }
   }
-  #makeRowDom(rank,icon,name,score){
+  #makeRowDom(rank, icon, name, score) {
     const svg = this.#genIcon(icon);
     const $row = this.#makeDomFromTemplate(htmlRow);
     const $rank = $row.querySelector(".uiRankRank");
@@ -250,32 +250,32 @@ class uiRanking{
     return $row;
   }
   #makeDomFromTemplate(template) {
-    const t = document.createElement('template');
+    const t = document.createElement("template");
     t.innerHTML = template.trim();
     return t.content.cloneNode(true);
   }
-  async #getRanking(){
+  async #getRanking() {
     try {
-      const res = await this.socket.timeout(3000).emitWithAck("getRanking",null);
+      const res = await this.socket.timeout(3000).emitWithAck("getRanking", null);
       return res;
     } catch (err) {
-      console.error("uiRanking.#getRanking() server error = "+err);
+      console.error("uiRanking.#getRanking() server error = " + err);
       return null;
     }
   }
-  #genIcon(str){
-    const svg = avatar(str, { size: 128, backgroundColors: ['transparent'] ,blackout:false});
+  #genIcon(str) {
+    const svg = avatar(str, { size: 128, backgroundColors: ["transparent"], blackout: false });
     return svg;
   }
-  #startUpdateTicker(){
+  #startUpdateTicker() {
     this.$ticker.classList.remove("hide");
-    if(this.updateTimer != null){
+    if (this.updateTimer != null) {
       clearTimeout(this.updateTimer);
       this.updateTimer = null;
     }
-    this.updateTimer = setTimeout(()=>{
+    this.updateTimer = setTimeout(() => {
       this.$ticker.classList.add("hide");
-    },TICKER_TIME);
+    }, TICKER_TIME);
   }
 }
 

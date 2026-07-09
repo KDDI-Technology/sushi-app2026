@@ -1,6 +1,6 @@
 // bgimageloader.mjs
-// umakamon app bg imageloader
-// (C)2025 by KDDI Technology
+// sushi app bg imageloader
+// (C)2026 by KDDI Technology
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
 const imageUrls = ["/img/bg/umi.jpeg", "/img/bg/itamae.jpeg"];

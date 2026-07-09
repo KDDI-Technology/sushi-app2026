@@ -1,6 +1,6 @@
 // ui-register.mjs
-// umakamon app user registration UI
-// (C)2025 by KDDI Technology
+// sushi app user registration UI
+// (C)2026 by KDDI Technology
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
 import avatar from "/libs/animal-avatar-generator.esm.js";
@@ -135,12 +135,13 @@ const html = `
 </div>
 `;
 
-const NG_WORDS = ["しね","ころ", "ばか","まぬけ","ちん","まん","うん","あほ"];
-const HIRAGANA = "あいうえおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもやゆよらりるれろわん";
+const NG_WORDS = ["しね", "ころ", "ばか", "まぬけ", "ちん", "まん", "うん", "あほ"];
+const HIRAGANA =
+  "あいうえおかがきぎくぐけげこごさざしじすずせぜそぞただちぢつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもやゆよらりるれろわん";
 const HIRAGANA_HEAD = HIRAGANA.replace(/ん/g, "");
 
-class uiRegister{
-  constructor(dom,socket){
+class uiRegister {
+  constructor(dom, socket) {
     this.dom = dom;
     this.socket = socket;
     this.status = "hide";
@@ -148,7 +149,7 @@ class uiRegister{
     this.iconSVG = null;
     this.userData = null;
   }
-  async init(){
+  async init() {
     this.dom.innerHTML = html;
     this.$wrap = this.dom.querySelector("#uiRegWrap");
     this.$main = this.dom.querySelector("#uiRegMain");
@@ -159,45 +160,45 @@ class uiRegister{
     this.$icon = this.dom.querySelector("#uiRegIcon");
     this.hide();
     this.$commit.onclick = null;
-    this.$icon.onclick = (()=>{
+    this.$icon.onclick = () => {
       this.#genIcon(null);
-    });
+    };
     const udjson = localStorage.getItem("userData");
-    if((udjson != null)&&(udjson != 'null')){
+    if (udjson != null && udjson != "null") {
       console.dir(udjson);
       const obj = JSON.parse(udjson);
       this.userData = obj;
-      if((this.userData.name != undefined)&&(this.userData.name != null)){
+      if (this.userData.name != undefined && this.userData.name != null) {
         this.$text.value = this.userData.name;
       }
-      if((this.userData.icon != undefined)&&(this.userData.icon != null)){
+      if (this.userData.icon != undefined && this.userData.icon != null) {
         this.avatarStr = this.userData.icon;
         this.#genIcon(this.avatarStr);
-      }else{
+      } else {
         this.#genIcon(null);
         this.userData.icon = this.avatarStr;
       }
-    }else{
+    } else {
       console.log("userData init");
-      this.userData = {userid:null,name:null,icon:null};
+      this.userData = { userid: null, name: null, icon: null };
       this.$text.value = "";
     }
     await this.update();
   }
-  async update(){
-    if(this.userData != null){
+  async update() {
+    if (this.userData != null) {
       const userdata = await this.#sendUserData(this.userData);
       this.userData = userdata;
       localStorage.setItem("userData", JSON.stringify(this.userData));
-      if(this.onUpdate != null){
+      if (this.onUpdate != null) {
         const userData = this.getUserData();
         this.onUpdate(userData);
       }
-    }else{
+    } else {
       console.log("userData is null");
     }
   }
-  hide(){
+  hide() {
     this.dom.classList.add("hide");
     this.status = "hide";
     this.$commit.onclick = null;
@@ -207,53 +208,53 @@ class uiRegister{
     this.$text.oncompositionend = null;
     this.composing = false;
   }
-  show(){
+  show() {
     this.dom.classList.remove("hide");
-    if(this.$text.value.length > 0){
+    if (this.$text.value.length > 0) {
       this.$commit.classList.remove("hide");
-    }else{
+    } else {
       this.$commit.classList.add("hide");
     }
     this.status = "show";
-    this.$commit.onclick = (async ()=>{
+    this.$commit.onclick = async () => {
       let userData = {
-        userid:null,
-        name:this.$text.value,
-        icon:this.avatarStr
+        userid: null,
+        name: this.$text.value,
+        icon: this.avatarStr,
       };
-      if(this.userData != null){
+      if (this.userData != null) {
         userData.userid = this.userData.userid;
         this.userData.name = userData.name;
         this.userData.icon = userData.icon;
       }
       await this.update();
       this.#startMessage();
-    });
-    this.$random.onclick = (()=>{
+    };
+    this.$random.onclick = () => {
       const name = this.#genRandomName();
       this.$text.value = name;
       this.#genIcon(null);
-      if(this.$text.value.length > 0){
+      if (this.$text.value.length > 0) {
         this.$commit.classList.remove("hide");
-      }else{
+      } else {
         this.$commit.classList.add("hide");
       }
-    });
-    this.$text.oncompositionstart = ((e)=>{
+    };
+    this.$text.oncompositionstart = (e) => {
       this.composing = true;
-    });
-    this.$text.oncompositionend = ((e)=>{
+    };
+    this.$text.oncompositionend = (e) => {
       this.composing = false;
       sanitizeValue(e.target);
-    });
-    this.$text.oninput = ((e)=>{
-      if(this.$text.value.length > 0){
+    };
+    this.$text.oninput = (e) => {
+      if (this.$text.value.length > 0) {
         this.$commit.classList.remove("hide");
-      }else{
+      } else {
         this.$commit.classList.add("hide");
       }
-    });
-    function sanitizeValue(target){
+    };
+    function sanitizeValue(target) {
       let value = target.value;
       value = value.replace(/[^ぁ-んー]/g, "");
       value = value.replace(/^ん/, "");
@@ -261,50 +262,51 @@ class uiRegister{
       target.value = value;
     }
   }
-  setOnUpdate(func){
+  setOnUpdate(func) {
     this.onUpdate = func;
   }
-  resetOnUpdate(){
+  resetOnUpdate() {
     this.onUpdate = null;
   }
-  getUserData(){
+  getUserData() {
     let userdata = structuredClone(this.userData);
-    if(userdata != null){
+    if (userdata != null) {
       userdata.iconSVG = this.iconSVG;
     }
     return userdata;
   }
-  async #sendUserData(userData){
+  async #sendUserData(userData) {
     try {
       const res = await this.socket.timeout(3000).emitWithAck("register", userData);
       return res;
     } catch (err) {
-      console.error("uiRegister.#sendUserData() server error = "+err);
+      console.error("uiRegister.#sendUserData() server error = " + err);
       return null;
     }
   }
-  #startMessage(){
+  #startMessage() {
     this.$result.classList.remove("hide");
-    setTimeout(()=>{
+    setTimeout(() => {
       this.$result.classList.add("hide");
       this.hide();
-    },3000);
+    }, 3000);
   }
-  #genRandomName(){
+  #genRandomName() {
     while (true) {
       const length = Math.floor(Math.random() * 4) + 3;
       let name = HIRAGANA_HEAD[Math.floor(Math.random() * HIRAGANA_HEAD.length)];
       for (let i = 1; i < length; i++) {
         name += HIRAGANA[Math.floor(Math.random() * HIRAGANA.length)];
       }
-      if (NG_WORDS.some(ng => name.includes(ng))) {
+      if (NG_WORDS.some((ng) => name.includes(ng))) {
         continue;
       }
       return name;
     }
   }
-  #genRandomString(length){
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?/`~";
+  #genRandomString(length) {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?/`~";
     let result = "";
     for (let i = 0; i < length; i++) {
       const idx = Math.floor(Math.random() * chars.length);
@@ -312,15 +314,15 @@ class uiRegister{
     }
     return result;
   }
-  #genIcon(_str){
+  #genIcon(_str) {
     let str;
-    if(_str == null){
+    if (_str == null) {
       str = this.#genRandomString(10);
       this.avatarStr = str;
-    }else{
+    } else {
       str = _str;
     }
-    const svg = avatar(str, { size: 128, backgroundColors: ['transparent'] ,blackout:false});
+    const svg = avatar(str, { size: 128, backgroundColors: ["transparent"], blackout: false });
     this.$icon.innerHTML = svg;
     this.iconSVG = svg;
   }
