@@ -2,6 +2,6 @@ pre-commit:
   parallel: true
   commands:
     oxfmt:
-      glob: "*.{js,mjs}"
+      glob: "*.{htm,html,css,js,mjs}"
       run: npm exec oxfmt -- {staged_files} --write
       stage_fixed: true
