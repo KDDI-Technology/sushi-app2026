@@ -1,7 +1,7 @@
-import * as PIXI from '/libs/pixi.min-v6.2.1.mjs';
-import animGame from './animation-game.mjs';
-import Chicken from './animation-chicken.mjs';
-import Users from './animation-user.mjs';
+import * as PIXI from "/libs/pixi.min-v6.2.1.mjs";
+import animGame from "./animation-game.mjs";
+import Chicken from "./animation-chicken.mjs";
+import Users from "./animation-user.mjs";
 
 const DEB = false;
 
@@ -13,22 +13,20 @@ let CONTENT_HEIGHT = window.innerHeight;
 const BEAT_EFFECT_MAX = 12;
 
 const faces = [
-  '/img/nagasaki/1.png',
-  '/img/nagasaki/2.png',
-  '/img/nagasaki/3.png',
-  '/img/nagasaki/4.png',
-  '/img/nagasaki/5.png',
-  '/img/nagasaki/6.png',
-  '/img/nagasaki/7.png',
-  '/img/nagasaki/8.png',
-  '/img/nagasaki/9.png'
+  "/img/sushi/00.png",
+  "/img/sushi/01.png",
+  "/img/sushi/02.png",
+  "/img/sushi/03.png",
+  "/img/sushi/04.png",
+  "/img/sushi/05.png",
+  "/img/sushi/06.png",
+  "/img/sushi/07.png",
+  "/img/sushi/08.png",
+  "/img/sushi/09.png",
+  "/img/sushi/10.png",
 ];
 
-const kusos = [
-  '/img/kuso/kuso1.png',
-  '/img/kuso/kuso2.png',
-  '/img/kuso/kuso3.png'
-];
+const kusos = ["/img/kuso/kuso1.png", "/img/kuso/kuso2.png", "/img/kuso/kuso3.png"];
 
 const BG_LINES = 48;
 const MAX_BG_TICKS = 120;
@@ -38,34 +36,26 @@ let dispCont = 0;
 let rotatecnt = 0;
 let rotationSpeed = 0.05; //(Math.random() * 0.1)+0.005;
 
-const colors = [
-  0xFF0080,
-  0xFFBA00,
-  0x1CDB1C,
-  0xFF3A00,
-  0x4768E6,
-  0x00B3FF,
-  0xAE0BBF
-];
+const colors = [0xff0080, 0xffba00, 0x1cdb1c, 0xff3a00, 0x4768e6, 0x00b3ff, 0xae0bbf];
 
-class animation{
-  constructor(atx){
+class animation {
+  constructor(atx) {
     this.app = new PIXI.Application({
       width: window.innerWidth,
       height: window.innerHeight,
-      transparent:true,
-      antialias: true
+      transparent: true,
+      antialias: true,
     });
     this.resizeTimer = null;
     this.wrapper = null;
     this.nowFaceIdx = null;
     this.nowKusoIdx = null;
-    this.chicken = new Chicken(this.app,atx);
+    this.chicken = new Chicken(this.app, atx);
     this.users = new Users(this.app);
-    this.game = new animGame(this.app,atx);
+    this.game = new animGame(this.app, atx);
   }
-  async init(wrapper){
-    if(DEB) console.log("animation.init()");
+  async init(wrapper) {
+    if (DEB) console.log("animation.init()");
 
     this.wrapper = wrapper;
     this.wrapper.appendChild(this.app.view);
@@ -91,62 +81,62 @@ class animation{
 
   ///////////////////////////////////////////////////////////////////////
   // Background Animation
-  initBgLines(){
+  initBgLines() {
     this.bgContainer = new PIXI.Container();
     this.app.stage.addChild(this.bgContainer);
     this.grpContainer = new PIXI.Container();
     this.bgContainer.addChild(this.grpContainer);
     this.grpContainer.position.set(CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2);
-    this.grpContainer.pivot.x = CONTENT_WIDTH/2; 
-    this.grpContainer.pivot.y = CONTENT_HEIGHT/2; 
+    this.grpContainer.pivot.x = CONTENT_WIDTH / 2;
+    this.grpContainer.pivot.y = CONTENT_HEIGHT / 2;
   }
-  drawBgLine(){
+  drawBgLine() {
     rotatecnt += 1;
     let lineSize;
     let line = new PIXI.Graphics();
     let color = colors[Math.floor(Math.random() * colors.length)];
     line.beginFill(color);
-    line.moveTo(0,0);
-    if(CONTENT_WIDTH > CONTENT_HEIGHT){
+    line.moveTo(0, 0);
+    if (CONTENT_WIDTH > CONTENT_HEIGHT) {
       lineSize = CONTENT_WIDTH * 1.5;
-    }else{
+    } else {
       lineSize = CONTENT_HEIGHT * 1.5;
     }
-    line.lineTo(lineSize,-150);
-    line.lineTo(lineSize,150);
-    line.lineTo(0,0);
+    line.lineTo(lineSize, -150);
+    line.lineTo(lineSize, 150);
+    line.lineTo(0, 0);
     line.endFill();
     let lineContainer = new PIXI.Graphics();
     lineContainer.position.set(CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2);
     lineContainer.rotation = rotatecnt;
-    lineContainer.pivot.x = 0; 
-    lineContainer.pivot.y = 0; 
+    lineContainer.pivot.x = 0;
+    lineContainer.pivot.y = 0;
     lineContainer.addChild(line);
     this.grpContainer.addChild(lineContainer);
   }
-  startBgLines(){
+  startBgLines() {
     isBgExist = true;
     dispCont = 0;
     this.grpContainer.removeChildren();
-    for(let i=0;i<BG_LINES;i++){
+    for (let i = 0; i < BG_LINES; i++) {
       this.drawBgLine();
     }
   }
-  stopBgLines(){
+  stopBgLines() {
     this.grpContainer.removeChildren();
     isBgExist = false;
     dispCont = 0;
   }
-  updateBgLines(){
-    if(isBgExist){
-      dispCont ++;
-      if(dispCont > MAX_BG_TICKS){
+  updateBgLines() {
+    if (isBgExist) {
+      dispCont++;
+      if (dispCont > MAX_BG_TICKS) {
         this.grpContainer.removeChildren();
         isBgExist = false;
         dispCont = 0;
         this.startBgLines();
-      }else{
-        this.grpContainer.rotation +=rotationSpeed;
+      } else {
+        this.grpContainer.rotation += rotationSpeed;
       }
     }
   }
@@ -154,13 +144,13 @@ class animation{
   /////////////////////////////////////
   // faces
   /////////////////////////////////////
-  initFaces(){
+  initFaces() {
     this.faceContainer = new PIXI.Container();
-    this.faceContainer.position.set(CONTENT_WIDTH/2,CONTENT_HEIGHT/2);
+    this.faceContainer.position.set(CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2);
     this.app.stage.addChild(this.faceContainer);
     this.faceTex = [];
     this.faceSpr = [];
-    for(let cnt=0;cnt<faces.length;cnt++){
+    for (let cnt = 0; cnt < faces.length; cnt++) {
       let tex = PIXI.Texture.from(faces[cnt]);
       this.faceTex.push(tex);
       let spr = new PIXI.Sprite(tex);
@@ -171,24 +161,24 @@ class animation{
       this.faceSpr.push(spr);
     }
   }
-  addFace(index){
-    if(index >= faces.length){
+  addFace(index) {
+    if (index >= faces.length) {
       return;
     }
     this.nowFaceIdx = index;
-    this.faceSpr[index].speed = (Math.random() * 0.2);
+    this.faceSpr[index].speed = Math.random() * 0.2;
     this.faceContainer.removeChildren();
-    this.faceContainer.addChild(this.faceSpr[index]); 
+    this.faceContainer.addChild(this.faceSpr[index]);
   }
-  updateFaces(){
-    if(this.nowFaceIdx != null){
+  updateFaces() {
+    if (this.nowFaceIdx != null) {
       this.faceSpr[this.nowFaceIdx].rotation += this.faceSpr[this.nowFaceIdx].speed;
       this.faceSpr[this.nowFaceIdx].scale.x += 0.05;
       this.faceSpr[this.nowFaceIdx].scale.y += 0.05;
     }
   }
-  removeFace(){
-    if(this.nowFaceIdx != null){
+  removeFace() {
+    if (this.nowFaceIdx != null) {
       this.faceSpr[this.nowFaceIdx].rotation = 0;
       this.faceSpr[this.nowFaceIdx].scale.x = 0.5;
       this.faceSpr[this.nowFaceIdx].scale.y = 0.5;
@@ -200,13 +190,13 @@ class animation{
   /////////////////////////////////////
   // kusos
   /////////////////////////////////////
-  initKusos(){
+  initKusos() {
     this.kusoContainer = new PIXI.Container();
-    this.kusoContainer.position.set(CONTENT_WIDTH/2,CONTENT_HEIGHT/2);
+    this.kusoContainer.position.set(CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2);
     this.app.stage.addChild(this.kusoContainer);
     this.kusoTex = [];
     this.kusoSpr = [];
-    for(let cnt=0;cnt<kusos.length;cnt++){
+    for (let cnt = 0; cnt < kusos.length; cnt++) {
       let tex = PIXI.Texture.from(kusos[cnt]);
       this.kusoTex.push(tex);
       let spr = new PIXI.Sprite(tex);
@@ -217,22 +207,22 @@ class animation{
       this.kusoSpr.push(spr);
     }
   }
-  addKuso(index){
+  addKuso(index) {
     index %= kusos.length;
     this.nowKusoIdx = index;
-    this.kusoSpr[index].speed = (Math.random() * 0.2);
+    this.kusoSpr[index].speed = Math.random() * 0.2;
     this.kusoContainer.removeChildren();
-    this.kusoContainer.addChild(this.kusoSpr[index]); 
+    this.kusoContainer.addChild(this.kusoSpr[index]);
   }
-  updateKusos(){
-    if(this.nowKusoIdx != null){
+  updateKusos() {
+    if (this.nowKusoIdx != null) {
       this.kusoSpr[this.nowKusoIdx].rotation += this.kusoSpr[this.nowKusoIdx].speed;
       this.kusoSpr[this.nowKusoIdx].scale.x += 0.05;
       this.kusoSpr[this.nowKusoIdx].scale.y += 0.05;
     }
   }
-  removeKuso(){
-    if(this.nowKusoIdx != null){
+  removeKuso() {
+    if (this.nowKusoIdx != null) {
       this.kusoSpr[this.nowKusoIdx].rotation = 0;
       this.kusoSpr[this.nowKusoIdx].scale.x = 0.5;
       this.kusoSpr[this.nowKusoIdx].scale.y = 0.5;
@@ -242,35 +232,35 @@ class animation{
   }
 
   // chicken
-  onChicken(){
-    const score = Math.floor(500+Math.random()*3000);
-    if(this.game.status == 2){
-      this.game.addScore(score,"center");
+  onChicken() {
+    const score = Math.floor(500 + Math.random() * 3000);
+    if (this.game.status == 2) {
+      this.game.addScore(score, "center");
     }
   }
 
   /////////////////////////////////////
   // resize
   /////////////////////////////////////
-  resize(w,h){
-    if(DEB) console.log("animation.resize()");
+  resize(w, h) {
+    if (DEB) console.log("animation.resize()");
     CONTENT_WIDTH = w; // window.innerWidth;
     CONTENT_HEIGHT = h; //window.innerHeight;
-    if(this.resizeTimer){
+    if (this.resizeTimer) {
       clearTimeout(this.resizeTimer);
       this.resizeTimer = null;
     }
-    this.resizeTimer = setTimeout(()=>{
-      if(DEB) console.log("animation.resize() timeout");
+    this.resizeTimer = setTimeout(() => {
+      if (DEB) console.log("animation.resize() timeout");
       this.app.renderer.resize(CONTENT_WIDTH, CONTENT_HEIGHT);
-      this.faceContainer.position.set(CONTENT_WIDTH/2,CONTENT_HEIGHT/2);
+      this.faceContainer.position.set(CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2);
       this.grpContainer.position.set(CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2);
-      this.grpContainer.pivot.x = CONTENT_WIDTH/2; 
-      this.grpContainer.pivot.y = CONTENT_HEIGHT/2; 
+      this.grpContainer.pivot.x = CONTENT_WIDTH / 2;
+      this.grpContainer.pivot.y = CONTENT_HEIGHT / 2;
       this.chicken.resize();
       this.users.resize();
       this.game.resize();
-    },50);
+    }, 50);
   }
 }
 
