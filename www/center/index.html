@@ -63,7 +63,7 @@ html,body {
   text-align: center;
   line-height: 24px;
   vertical-align: middle;
-  font-size:20px;  
+  font-size:20px;
   color:white;
 }
 #loading{
@@ -111,7 +111,7 @@ html,body {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  -ms-user-select: none;  
+  -ms-user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
   border-radius:60px;
@@ -134,7 +134,7 @@ html,body {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  -ms-user-select: none;  
+  -ms-user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -159,7 +159,7 @@ html,body {
   left:10px;
   width:110px;
   height:50px;
-  display: flex;  
+  display: flex;
   background-image:url(/img/umakamon-logo.png);
   background-repeat: no-repeat;
   background-size: contain;
@@ -333,7 +333,7 @@ html,body {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  -ms-user-select: none;  
+  -ms-user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -437,7 +437,6 @@ html,body {
     <a href="https://kddi-tech.com/" target="_blank"><div class="kteclogo"></div></a>
   </div>
   <a href="https://kddi-tech.com/" target="_blank"><div class="kteclogo"></div></a>
-  <a href="https://www.nagasaki-tabinet.com" target="_blank"><div id="photocredit">写真提供 ©長崎県観光連盟</div></a>
 </div>
 <script type="module">
 const $start = document.querySelector('#start');
@@ -633,7 +632,7 @@ function onSponge(val){
 
   const base = (40>val)? val : -val;
   const score = base*(Math.floor(Math.random()*50));
-  console.log("onSponge() val="+val+" score="+score);  
+  console.log("onSponge() val="+val+" score="+score);
 
   fire(score,0);
 }
@@ -691,9 +690,9 @@ function onBtnButton(num,val,device){
       anim.game.addScore(score,"center");
     }
     if(anim.game.getStatus() == 0){
-      smp2.play(null,index,1);  
+      smp2.play(null,index,1);
     }else{
-      smp2.playSoundOnly(null,index,1);  
+      smp2.playSoundOnly(null,index,1);
     }
   }
 }
@@ -726,9 +725,9 @@ socket.on("push", (data)=>{
   }
   let sindex = Math.floor(Math.random() * 16);
   if(anim.game.getStatus() == 0){
-    smp2.play(null,sindex,1);  
+    smp2.play(null,sindex,1);
   }else{
-    smp2.playSoundOnly(null,sindex,1);  
+    smp2.playSoundOnly(null,sindex,1);
   }
 });
 
@@ -766,7 +765,7 @@ joypad.on("disconnect",(e)=>{
 joypad.on("button_press",(e)=>{
   const button = e.detail.buttonName;
   let index = null;
-  console.log("gamepad press="+button); 
+  console.log("gamepad press="+button);
   switch(button){
   case "button_0":  index = 1; break;
   case "button_1":  index = 2; break;
@@ -788,7 +787,7 @@ joypad.on("button_press",(e)=>{
 });
 
 ///////////////////////////////////////////////////////////////////////
-// for game socket 
+// for game socket
 anim.game.setSocket(socket);
 anim.game.setOnGameStatusChange(onGameStatusChange);
 
@@ -865,10 +864,10 @@ function onGameStatusChange(e){
   switch(e.status){
   case 1:
     uirank.hide();
-    break;    
+    break;
   case 3:
     uirank.updateCenterScores(e.scores);
-    break;    
+    break;
   case 4:
     uirank.show();
     break;
@@ -877,6 +876,6 @@ function onGameStatusChange(e){
   }
 }
 
-</script>  
+</script>
 </body>
 </html>
