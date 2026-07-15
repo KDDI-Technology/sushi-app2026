@@ -2,6 +2,9 @@
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "ignorePatterns": [
     "arduino/**",
-    "work/**"
+    "package-build/**",
+    "work/**",
+    "www/libs/pixi-filters-v4.2.0.mjs",
+    "www/libs/pixi.min-v6.2.1.mjs"
   ]
 }

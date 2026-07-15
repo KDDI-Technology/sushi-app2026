@@ -3,14 +3,14 @@
 // (C)2025 by KDDI Technology
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
-import fs from 'fs';
-import http from 'http';
-import express from 'express';
-import cors from 'cors';　
-import path from 'path';
-import auth from 'basic-auth';
+import fs from "fs";
+import http from "http";
+import express from "express";
+import cors from "cors";
+import path from "path";
+import auth from "basic-auth";
 import { Server } from "socket.io";
-import dt from 'date-utils';
+import dt from "date-utils";
 import dotenv from "dotenv";
 
 const fsp = fs.promises;
@@ -28,10 +28,10 @@ const DIV_NUM = 6;
 
 dotenv.config();
 
-function log(str){
+function log(str) {
   var dt = new Date();
   let datetime = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
-  console.log("["+datetime+"] "+(str));
+  console.log("[" + datetime + "] " + str);
 }
 
 try {
@@ -43,7 +43,7 @@ try {
   console.error(err);
 }
 
-function basicAuth(req, res, next){
+function basicAuth(req, res, next) {
   const user = auth(req);
   const validUser = process.env.BASIC_USER;
   const validPass = process.env.BASIC_PASS;
@@ -56,187 +56,188 @@ function basicAuth(req, res, next){
 
 async function runExpressApp() {
   app = express();
-  app.use(express.urlencoded({ extended: true , limit: '10mb'}));
-  app.use(express.json({ extended: true , limit: '10mb'}));
+  app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+  app.use(express.json({ extended: true, limit: "10mb" }));
   app.use(cors());
-  app.use('/center',basicAuth,express.static('./www/center'));
-  app.use('/',express.static('./www'));
+  app.use("/center", basicAuth, express.static("./www/center"));
+  app.use("/", express.static("./www"));
 }
 
 async function runWebServer() {
   webServer = http.createServer(app);
-  webServer.on('error', (err) => {
-    console.error('starting web server failed:', err.message);
+  webServer.on("error", (err) => {
+    console.error("starting web server failed:", err.message);
   });
 
   await new Promise((resolve) => {
     webServer.listen(LISTEN_PORT, () => {
-      console.log('server is running PORT:'+LISTEN_PORT);
+      console.log("server is running PORT:" + LISTEN_PORT);
       resolve();
     });
   });
 }
 
-let cons = {};      // connectionの一覧を管理するMAP  key = socket.id
-let clients = {};   // clientの一覧を管理するMAP      key = socket.id
-let masters = {};   // masterの一覧を管理するMAP      key = socket.id
-let users = {};     // userの一覧を管理するMAP        key = userid
+let cons = {}; // connectionの一覧を管理するMAP  key = socket.id
+let clients = {}; // clientの一覧を管理するMAP      key = socket.id
+let masters = {}; // masterの一覧を管理するMAP      key = socket.id
+let users = {}; // userの一覧を管理するMAP        key = userid
 
-let snapshots = [];    // userランキングの集計用 (30分リングバッファ)
-let minuteDeltas = {};  // 1分間のscore増加分蓄積用
-let masterScores = {};  // masterスコアの集計用
+let snapshots = []; // userランキングの集計用 (30分リングバッファ)
+let minuteDeltas = {}; // 1分間のscore増加分蓄積用
+let masterScores = {}; // masterスコアの集計用
 
-function runSocketServer(){
-  io = new Server(webServer, {path:"/ws"});
-  io.on("connection",(socket)=>{
-    log("new connection : "+socket.id);
+function runSocketServer() {
+  io = new Server(webServer, { path: "/ws" });
+  io.on("connection", (socket) => {
+    log("new connection : " + socket.id);
 
-    cons[socket.id] = {id:socket.id};
+    cons[socket.id] = { id: socket.id };
 
-    socket.on("register",(data,callback)=>{
+    socket.on("register", (data, callback) => {
       console.log("register=");
       console.dir(data);
-      log("register : "+socket.id);
+      log("register : " + socket.id);
       let userid = null;
-      if(data.userid == null){ // new user
+      if (data.userid == null) {
+        // new user
         userid = genUserId();
-      }else{
-        if(data.userid in users){
+      } else {
+        if (data.userid in users) {
           // overwrite user data
           userid = data.userid;
-        }else{
-          console.log("invalid user id : "+data.userid);
+        } else {
+          console.log("invalid user id : " + data.userid);
           userid = genUserId();
         }
       }
-      clients[socket.id] = {userid:userid};
-      if(!(userid in users)){
+      clients[socket.id] = { userid: userid };
+      if (!(userid in users)) {
         users[userid] = {};
       }
-      if(data.name != null){
+      if (data.name != null) {
         users[userid].name = data.name;
       }
-      if(data.icon != null){
+      if (data.icon != null) {
         users[userid].icon = data.icon;
       }
-      if(users[userid].score == undefined || users[userid].score == null){
+      if (users[userid].score == undefined || users[userid].score == null) {
         users[userid].score = 0;
       }
       callback({
-        ok:true,
-        userid:userid,
-        name:users[userid].name,
-        icon:users[userid].icon,
-        score:users[userid].score
+        ok: true,
+        userid: userid,
+        name: users[userid].name,
+        icon: users[userid].icon,
+        score: users[userid].score,
       });
       let len = getUserNum();
-      for(let key in clients){
-        io.to(key).emit("clients",len);
+      for (let key in clients) {
+        io.to(key).emit("clients", len);
       }
-      for(let key in masters){
-        io.to(key).emit("clients",len);
+      for (let key in masters) {
+        io.to(key).emit("clients", len);
       }
     });
 
-    socket.on("master",(data)=>{
-      log("master : "+data);
-      masters[socket.id] = {id:socket.id};
+    socket.on("master", (data) => {
+      log("master : " + data);
+      masters[socket.id] = { id: socket.id };
       let len = getUserNum();
-      io.to(socket.id).emit("clients",len);
+      io.to(socket.id).emit("clients", len);
     });
 
-    socket.on("push",(data,callback)=>{
-      log("push : "+data);
+    socket.on("push", (data, callback) => {
+      log("push : " + data);
       let score = null;
-      if(socket.id in masters){
+      if (socket.id in masters) {
         console.log("push from master.");
         // ToDo score 更新処理
-      }else{
-        if(socket.id in clients){
+      } else {
+        if (socket.id in clients) {
           let userid = clients[socket.id].userid;
-          console.log("push from client. userid="+userid);
+          console.log("push from client. userid=" + userid);
           let index = Number(data);
           let delta = getScore(index);
-          users[userid].score = users[userid].score + delta
+          users[userid].score = users[userid].score + delta;
           minuteDeltas[userid] = (minuteDeltas[userid] || 0) + delta;
           score = users[userid].score;
-          for(let key in masters){
+          for (let key in masters) {
             let sendData = {
-              name:users[userid].name,
-              icon:users[userid].icon,
-              score:delta,
-              index:index
+              name: users[userid].name,
+              icon: users[userid].icon,
+              score: delta,
+              index: index,
             };
-            io.to(key).emit("push",sendData);
+            io.to(key).emit("push", sendData);
           }
-        }else{
+        } else {
           console.log("push from unregisterd user.");
         }
       }
-      console.log("score="+score);
-      callback({ok:true,score:score});
+      console.log("score=" + score);
+      callback({ ok: true, score: score });
     });
 
-    socket.on("getRanking",(data,callback)=>{
+    socket.on("getRanking", (data, callback) => {
       const userid = clients[socket.id].userid;
       const { ranking, position } = getRankingAndPosition(userid);
       const top3 = ranking.slice(0, 3);
       const payload = {
-        users:top3,
-        myRank: position
+        users: top3,
+        myRank: position,
       };
       callback(payload);
     });
 
-    socket.on("updateCenterScore",(data,callback)=>{
-    // "master" 複数発行できるが基本1台という想定なので、得点は上書きする。
-      masterScores[""+data.time] = data; // data = {time:time, score:score}
+    socket.on("updateCenterScore", (data, callback) => {
+      // "master" 複数発行できるが基本1台という想定なので、得点は上書きする。
+      masterScores["" + data.time] = data; // data = {time:time, score:score}
       const scores = calcMasterRanking(data.time);
       callback(scores);
     });
 
-    socket.on("getCenterScores",(data,callback)=>{
+    socket.on("getCenterScores", (data, callback) => {
       const scores = calcMasterRanking();
       callback(scores.scores);
-    })
+    });
 
-    socket.on("getRankingFromMaster",(data,callback)=>{
+    socket.on("getRankingFromMaster", (data, callback) => {
       const ranking = getRanking();
       const top3 = ranking.slice(0, 3);
       const payload = {
-        users:top3
+        users: top3,
       };
       callback(payload);
     });
 
-    socket.on("disconnect",(data)=>{
-      log("disconnected : "+socket.id);
+    socket.on("disconnect", (data) => {
+      log("disconnected : " + socket.id);
       let user = cons[socket.id].user;
       delete cons[socket.id];
-      if(socket.id in clients){
+      if (socket.id in clients) {
         delete clients[socket.id];
         let len = getUserNum();
-        for(let key in clients){
-          io.to(key).emit("clients",len);
+        for (let key in clients) {
+          io.to(key).emit("clients", len);
         }
-        for(let key in masters){
-          io.to(key).emit("clients",len);
+        for (let key in masters) {
+          io.to(key).emit("clients", len);
         }
       }
-      if(socket.id in masters){
+      if (socket.id in masters) {
         delete masters[socket.id];
       }
     });
   });
 }
 
-function genUserId(){
-  while(true){
+function genUserId() {
+  while (true) {
     let id = generateId(8);
-    if(id in users){
+    if (id in users) {
       continue;
     }
-    return(id);
+    return id;
   }
 }
 
@@ -251,42 +252,42 @@ function generateId(length = 8) {
   return result;
 }
 
-function getScore(num){
+function getScore(num) {
   let score = 0;
-  switch(num){
-  case 0:
-  case 1:
-  case 2:
-  case 3:
-  case 4:
-  case 5:
-  case 6:
-  case 7:
-    score = 5+Math.floor(Math.random()*5);
-    break;
+  switch (num) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      score = 5 + Math.floor(Math.random() * 5);
+      break;
   }
   return score;
 }
 
-function startAggregateInterval(){
-  interval = setInterval((e)=>{
+function startAggregateInterval() {
+  interval = setInterval((e) => {
     const now = new Date();
     const seconds = now.getSeconds();
-    console.log("interval sec="+seconds);
-//    if(prevSeconds > seconds){
-//      console.log("update ranking");
-//      calcScore();
-//      broadcast30minRanking();
-//    }
+    console.log("interval sec=" + seconds);
+    //    if(prevSeconds > seconds){
+    //      console.log("update ranking");
+    //      calcScore();
+    //      broadcast30minRanking();
+    //    }
     const div = seconds % DIV_NUM;
-    if(prevDiv > div){
+    if (prevDiv > div) {
       console.log("update ranking");
       calcScore();
       broadcast30minRanking();
     }
     prevDiv = div;
     prevSeconds = seconds;
-  },1000);
+  }, 1000);
 }
 
 function get30minRanking() {
@@ -304,7 +305,7 @@ function get30minRanking() {
 function calcScore() {
   const snap = {
     timestamp: Date.now(),
-    deltas: { ...minuteDeltas }
+    deltas: { ...minuteDeltas },
   };
   snapshots.push(snap);
   if (snapshots.length > 300) snapshots.shift();
@@ -317,13 +318,13 @@ function getRankingAndPosition(_userid) {
     userid,
     score,
     name: users[userid]?.name ?? "",
-    icon: users[userid]?.icon ?? ""
+    icon: users[userid]?.icon ?? "",
   }));
   ranking.sort((a, b) => b.score - a.score);
-  const position = ranking.findIndex(r => r.userid === _userid);
+  const position = ranking.findIndex((r) => r.userid === _userid);
   return {
-    ranking,            // 全ランキング
-    position: position >= 0 ? position + 1 : null  // 見つかったら順位、いなければ null
+    ranking, // 全ランキング
+    position: position >= 0 ? position + 1 : null, // 見つかったら順位、いなければ null
   };
 }
 
@@ -333,7 +334,7 @@ function getRanking() {
     userid,
     score,
     name: users[userid]?.name ?? "",
-    icon: users[userid]?.icon ?? ""
+    icon: users[userid]?.icon ?? "",
   }));
   ranking.sort((a, b) => b.score - a.score);
   return ranking;
@@ -345,39 +346,39 @@ function broadcast30minRanking() {
     const { ranking, position } = getRankingAndPosition(userid);
     const top3 = ranking.slice(0, 3);
     const payload = {
-      users:top3,
-      myRank: position
+      users: top3,
+      myRank: position,
     };
-    io.to(socketid).emit("rankingUpdate",payload);
+    io.to(socketid).emit("rankingUpdate", payload);
   }
   for (const socketid in masters) {
     const ranking = getRanking();
     const top3 = ranking.slice(0, 3);
-    const payload = {users:top3};
-    io.to(socketid).emit("rankingUpdate",payload);
+    const payload = { users: top3 };
+    io.to(socketid).emit("rankingUpdate", payload);
   }
 }
 
-function getUserNum(){
+function getUserNum() {
   let users = {};
-  for(let sid in clients){
+  for (let sid in clients) {
     const userid = clients[sid].userid;
     users[userid] = userid;
   }
   return Object.keys(users).length;
 }
 
-function calcMasterRanking(time){
+function calcMasterRanking(time) {
   let _rank = null;
-  let scores = Object.values(masterScores).sort((a,b)=>b.score-a.score);
-  if((time != undefined)&&(time != null)){
-    for(let cnt=0;cnt<scores.length;cnt++){
-      if(scores[cnt].time == time){
-        _rank = cnt+1;
+  let scores = Object.values(masterScores).sort((a, b) => b.score - a.score);
+  if (time != undefined && time != null) {
+    for (let cnt = 0; cnt < scores.length; cnt++) {
+      if (scores[cnt].time == time) {
+        _rank = cnt + 1;
         break;
       }
     }
   }
   let _scores10 = scores.slice(0, 10);
-  return {scores:_scores10,rank:_rank};
+  return { scores: _scores10, rank: _rank };
 }

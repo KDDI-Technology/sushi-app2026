@@ -5,877 +5,940 @@ sushi-app
 (c)2026 by KDDI Technology
 -->
 <html lang="ja">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
-<meta name="color-scheme" content="light only">
-<meta name="supported-color-schemes" content="light">
-<meta name="description" content="sushi-app">
-<link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon-180x180.png">
-<link rel="icon" type="image/png" href="/img/umakamon-192x192.png">
-<title>sushi-app</title>
-<style>
-@font-face {
-  font-family: 'KTEGAKI';
-  src: url('/libs/font.spicy-sweet.com/KTEGAKI.ttf') format('truetype');
-}
-*{
-  margin:0px;
-  padding:0px;
-  box-sizing: border-box;
-  font-family: 'KTEGAKI';
-}
-html,body {
-  height: 100%;
-  margin: 0;
-  background-color: black;
-  overflow:hidden;
-}
-#main{
-  position:relative;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-}
-#pixi_wrapper{
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.c1{
-  margin-top:60px;
-  width: 100%;
-  height: 180px;
-  background-image: url("/img/umakamon-logo.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-}
-.c2{
-  width: 100%;
-  height: 128px;
-}
-.c3{
-  width: 100%;
-  height:24px;
-  text-align: center;
-  line-height: 24px;
-  vertical-align: middle;
-  font-size:20px;
-  color:white;
-}
-#loading{
-  font-size: 20px;
-  text-align:center;
-  display:inline-block;
-  width:100%;
-  height:48px;
-  color:white;
-}
-#dpig{
-  background-image: url("/img/sushi/00.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="supported-color-schemes" content="light" />
+    <meta name="description" content="sushi-app" />
+    <link rel="apple-touch-icon" type="image/png" href="/img/apple-touch-icon-180x180.png" />
+    <link rel="icon" type="image/png" href="/img/umakamon-192x192.png" />
+    <title>sushi-app</title>
+    <style>
+      @font-face {
+        font-family: "KTEGAKI";
+        src: url("/libs/font.spicy-sweet.com/KTEGAKI.ttf") format("truetype");
+      }
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "KTEGAKI";
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background-color: black;
+        overflow: hidden;
+      }
+      #main {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #pixi_wrapper {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      .c1 {
+        margin-top: 60px;
+        width: 100%;
+        height: 180px;
+        background-image: url("/img/umakamon-logo.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      }
+      .c2 {
+        width: 100%;
+        height: 128px;
+      }
+      .c3 {
+        width: 100%;
+        height: 24px;
+        text-align: center;
+        line-height: 24px;
+        vertical-align: middle;
+        font-size: 20px;
+        color: white;
+      }
+      #loading {
+        font-size: 20px;
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        height: 48px;
+        color: white;
+      }
+      #dpig {
+        background-image: url("/img/sushi/00.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      }
 
-#outer{
-  position:absolute;
-  width:100%;
-  height:100%;
-  top: 0;
-  left: 0;
-  background-color:black;
-  z-index: 10;
-}
-#fv{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  height:calc(100% - 80px);
-}
+      #outer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: black;
+        z-index: 10;
+      }
+      #fv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: calc(100% - 80px);
+      }
 
-#start{
-  text-align:center;
-  display:inline-block;
-  width:240px;
-  height:60px;
-  font-size: 32px;
-  line-height: 60px;
-  vertical-align: center;
-  color:black;
-  background-color: pink;
-  cursor: pointer;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent;
-  border-radius:60px;
-}
-.hide{
-  display: none!important;
-}
+      #start {
+        text-align: center;
+        display: inline-block;
+        width: 240px;
+        height: 60px;
+        font-size: 32px;
+        line-height: 60px;
+        vertical-align: center;
+        color: black;
+        background-color: pink;
+        cursor: pointer;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 60px;
+      }
+      .hide {
+        display: none !important;
+      }
 
-#ai{
-  position: absolute;
-  bottom: 20px;
-  left: 10px;
-  width: 100px;
-  height: 40px;
-  font-size: 16px;
-  line-height: 40px;
-  text-align: center;
-  vertical-align: center;
-  cursor: pointer;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.sound_on{
-  background-color: yellow;
-}
-.sound_off{
-  background-color: white;
-}
-.label{
-  background-color: yellow;
-  width:70px;
-  height:20px;
-  line-height: 20px;
-  vertical-align: middle;
-  text-align: center;
-  border-radius: 10px 0 0 10px;
-}
-#titleWrapper{
-  position: absolute;
-  top:5px;
-  left:10px;
-  width:110px;
-  height:50px;
-  display: flex;
-  background-image:url(/img/umakamon-logo.png);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-}
-.logo{
-  width:30px;
-  height:30px;
-  background-image:url(/img/umakamon-192x192.png);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-}
-#title{
-  width:110px;
-  height:30px;
-  line-height: 30px;
-  vertical-align: middle;
-  padding-left:5px;
-}
-#loadingAnim{
-  width:100%;
-  height:40px;
-  background-image:url(/img/trim2.gif);
-  background-repeat: repeat-x;
-  background-size: contain;
-  background-position: left;
-}
-#nameWrap{
-  position:absolute;
-  top:10px;
-  left:125px;
-  min-width:100px;
-  height:40px;
-  display: flex;
-  align-items:center;
-  cursor:pointer;
-  justify-content: flex-start;
-  background-color:rgba(0,0,0,0.6);
-  border-radius: 20px;
-}
-#userName{
-  position:relative;
-  height:40px;
-  line-height: 40px;
-  vertical-align: middle;
-  text-align: center;
-  font-size:18px;
-  color:white;
-  padding:0px 10px;
-}
-#userIcon{
-  width:40px;
-  height:40px;
-  padding:0px 5px;
-}
-#userScore{
-  height:30px;
-  min-width:20px;
-  background-color:white;
-  color:black;
-  line-height: 30px;
-  vertical-align: middle;
-  text-align: center;
-  padding:0px 20px;
-  border-radius: 20px;
-}
-#onebtnConnWrap{
-  position:absolute;
-  bottom:270px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
+      #ai {
+        position: absolute;
+        bottom: 20px;
+        left: 10px;
+        width: 100px;
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        text-align: center;
+        vertical-align: center;
+        cursor: pointer;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .sound_on {
+        background-color: yellow;
+      }
+      .sound_off {
+        background-color: white;
+      }
+      .label {
+        background-color: yellow;
+        width: 70px;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+        text-align: center;
+        border-radius: 10px 0 0 10px;
+      }
+      #titleWrapper {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+        width: 110px;
+        height: 50px;
+        display: flex;
+        background-image: url(/img/umakamon-logo.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      }
+      .logo {
+        width: 30px;
+        height: 30px;
+        background-image: url(/img/umakamon-192x192.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      }
+      #title {
+        width: 110px;
+        height: 30px;
+        line-height: 30px;
+        vertical-align: middle;
+        padding-left: 5px;
+      }
+      #loadingAnim {
+        width: 100%;
+        height: 40px;
+        background-image: url(/img/trim2.gif);
+        background-repeat: repeat-x;
+        background-size: contain;
+        background-position: left;
+      }
+      #nameWrap {
+        position: absolute;
+        top: 10px;
+        left: 125px;
+        min-width: 100px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        justify-content: flex-start;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 20px;
+      }
+      #userName {
+        position: relative;
+        height: 40px;
+        line-height: 40px;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 18px;
+        color: white;
+        padding: 0px 10px;
+      }
+      #userIcon {
+        width: 40px;
+        height: 40px;
+        padding: 0px 5px;
+      }
+      #userScore {
+        height: 30px;
+        min-width: 20px;
+        background-color: white;
+        color: black;
+        line-height: 30px;
+        vertical-align: middle;
+        text-align: center;
+        padding: 0px 20px;
+        border-radius: 20px;
+      }
+      #onebtnConnWrap {
+        position: absolute;
+        bottom: 270px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
 
-#gameConnWrap{
-  position:absolute;
-  bottom:240px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
-#spongeConnWrap{
-  position:absolute;
-  bottom:210px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
-#canConnWrap{
-  position:absolute;
-  bottom:180px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
-#canModeWrap{
-  position:absolute;
-  bottom:150px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
-#connectionWrap{
-  position:absolute;
-  bottom:90px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
-#canModeValue{
-  background-color: white;
-  color:black;
-  width:50px;
-  height:20px;
-  line-height:20px;
-  vertical-align: middle;
-  text-align: center;
-  font-size:16px;
-  border-radius:0 10px 10px 0;
-}
-#connectionValue,#canConnValue,#spongeConnValue,#gameConnValue,#onebtnConnValue{
-  background-color: white;
-  color:black;
-  width:50px;
-  height:20px;
-  line-height:21px; /* ずれ対策 */
-  vertical-align: middle;
-  text-align: center;
-  font-size:16px;
-  border-radius:0 10px 10px 0;
-}
-#usersWrap{
-  position:absolute;
-  bottom:120px;
-  left:10px;
-  width:120px;
-  height:20px;
-  display: flex;
-}
-#usersValue{
-  background-color: white;
-  color:black;
-  width:50px;
-  height:20px;
-  line-height: 20px;
-  vertical-align: middle;
-  text-align: center;
-  border-radius:0 10px 10px 0;
-}
-#push{
-  position:absolute;
-  bottom:-40px;
-  right:-40px;
-  width:240px;
-  height:240px;
-  border-radius: 120px;
-  background-color:pink;
-  font-size:64px;
-  line-height: 220px;
-  text-align: center;
-  vertical-align: middle;
-  transform:rotate(-45deg);
-  cursor: pointer;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.kteclogo{
-  position:absolute;
-  bottom:10px;
-  left:10px;
-  width:80px;
-  height:40px;
-  background-image:url(/img/logo-ktec-512x256.png);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-}
-.connected{
-  background-color: pink!important;
-}
-.unsupported{
-  background-color: darkgray!important;
-}
-.supported{
-  background-color: pink!important;
-  color:black!important;
-}
-#register{
-  position:absolute;
-  width:100%;
-  height:100%;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-#photocredit{
-  position:absolute;
-  width:120px;
-  height:20px;
-  line-height: 20px;
-  vertical-align: middle;
-  text-align: center;
-  bottom:60px;
-  left:10px;
-  background-color:darkgray;
-  color:black;
-  font-size:9px;
-  font-family: 'sans-serif';
-  border-radius: 10px;
-}
+      #gameConnWrap {
+        position: absolute;
+        bottom: 240px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
+      #spongeConnWrap {
+        position: absolute;
+        bottom: 210px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
+      #canConnWrap {
+        position: absolute;
+        bottom: 180px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
+      #canModeWrap {
+        position: absolute;
+        bottom: 150px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
+      #connectionWrap {
+        position: absolute;
+        bottom: 90px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
+      #canModeValue {
+        background-color: white;
+        color: black;
+        width: 50px;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 16px;
+        border-radius: 0 10px 10px 0;
+      }
+      #connectionValue,
+      #canConnValue,
+      #spongeConnValue,
+      #gameConnValue,
+      #onebtnConnValue {
+        background-color: white;
+        color: black;
+        width: 50px;
+        height: 20px;
+        line-height: 21px; /* ずれ対策 */
+        vertical-align: middle;
+        text-align: center;
+        font-size: 16px;
+        border-radius: 0 10px 10px 0;
+      }
+      #usersWrap {
+        position: absolute;
+        bottom: 120px;
+        left: 10px;
+        width: 120px;
+        height: 20px;
+        display: flex;
+      }
+      #usersValue {
+        background-color: white;
+        color: black;
+        width: 50px;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+        text-align: center;
+        border-radius: 0 10px 10px 0;
+      }
+      #push {
+        position: absolute;
+        bottom: -40px;
+        right: -40px;
+        width: 240px;
+        height: 240px;
+        border-radius: 120px;
+        background-color: pink;
+        font-size: 64px;
+        line-height: 220px;
+        text-align: center;
+        vertical-align: middle;
+        transform: rotate(-45deg);
+        cursor: pointer;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .kteclogo {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        width: 80px;
+        height: 40px;
+        background-image: url(/img/logo-ktec-512x256.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+      }
+      .connected {
+        background-color: pink !important;
+      }
+      .unsupported {
+        background-color: darkgray !important;
+      }
+      .supported {
+        background-color: pink !important;
+        color: black !important;
+      }
+      #register {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+      #photocredit {
+        position: absolute;
+        width: 120px;
+        height: 20px;
+        line-height: 20px;
+        vertical-align: middle;
+        text-align: center;
+        bottom: 60px;
+        left: 10px;
+        background-color: darkgray;
+        color: black;
+        font-size: 9px;
+        font-family: "sans-serif";
+        border-radius: 10px;
+      }
 
-@media screen and (min-width: 481px) {
-
-} /* @Media */
-@media screen and (max-width: 480px) {
-
-} /* @Media */
-
-</style>
-</head>
-<body>
-<div id="main">
-  <div id="pixi_wrapper"></div>
-  <div class="talogo"></div>
-  <!-- タイトルロゴ画像の更新まで一時非表示 -->
-  <!-- <div id="titleWrapper"></div> -->
-  <div id="onebtnConnWrap">
-    <div class="label">1ボ接</div>
-    <div id="onebtnConnValue">?</div>
-  </div>
-  <div id="gameConnWrap">
-    <div class="label">コン接</div>
-    <div id="gameConnValue">?</div>
-  </div>
-  <div id="spongeConnWrap">
-    <div class="label">スポ接</div>
-    <div id="spongeConnValue">❌</div>
-  </div>
-  <div id="canModeWrap">
-    <div class="label">缶出力</div>
-    <div id="canModeValue">停止</div>
-  </div>
-  <div id="canConnWrap">
-    <div class="label">缶接続</div>
-    <div id="canConnValue">❌</div>
-  </div>
-  <div id="connectionWrap">
-    <div class="label">サーバ</div>
-    <div id="connectionValue">❌</div>
-  </div>
-  <div id="usersWrap">
-    <div class="label">ゲスト</div>
-    <div id="usersValue">0</div>
-  </div>
-  <div id="outer">
-    <div id="fv">
-      <div class="c1" id="dtitle"></div>
-      <div class="c3" id="texttitle">フィジカルWeb</div>
-      <div class="c2" id="dpig"></div>
-      <div id="loading">Now Loading....</div>
-      <div id="loadingAnim"></div>
-      <div id="start" class="hide">スタート</div>
+      @media screen and (min-width: 481px) {
+      } /* @Media */
+      @media screen and (max-width: 480px) {
+      } /* @Media */
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <div id="pixi_wrapper"></div>
+      <div class="talogo"></div>
+      <!-- タイトルロゴ画像の更新まで一時非表示 -->
+      <!-- <div id="titleWrapper"></div> -->
+      <div id="onebtnConnWrap">
+        <div class="label">1ボ接</div>
+        <div id="onebtnConnValue">?</div>
+      </div>
+      <div id="gameConnWrap">
+        <div class="label">コン接</div>
+        <div id="gameConnValue">?</div>
+      </div>
+      <div id="spongeConnWrap">
+        <div class="label">スポ接</div>
+        <div id="spongeConnValue">❌</div>
+      </div>
+      <div id="canModeWrap">
+        <div class="label">缶出力</div>
+        <div id="canModeValue">停止</div>
+      </div>
+      <div id="canConnWrap">
+        <div class="label">缶接続</div>
+        <div id="canConnValue">❌</div>
+      </div>
+      <div id="connectionWrap">
+        <div class="label">サーバ</div>
+        <div id="connectionValue">❌</div>
+      </div>
+      <div id="usersWrap">
+        <div class="label">ゲスト</div>
+        <div id="usersValue">0</div>
+      </div>
+      <div id="outer">
+        <div id="fv">
+          <div class="c1" id="dtitle"></div>
+          <div class="c3" id="texttitle">フィジカルWeb</div>
+          <div class="c2" id="dpig"></div>
+          <div id="loading">Now Loading....</div>
+          <div id="loadingAnim"></div>
+          <div id="start" class="hide">スタート</div>
+        </div>
+        <a href="https://kddi-tech.com/" target="_blank"><div class="kteclogo"></div></a>
+      </div>
+      <a href="https://kddi-tech.com/" target="_blank"><div class="kteclogo"></div></a>
     </div>
-    <a href="https://kddi-tech.com/" target="_blank"><div class="kteclogo"></div></a>
-  </div>
-  <a href="https://kddi-tech.com/" target="_blank"><div class="kteclogo"></div></a>
-</div>
-<script type="module">
-const $start = document.querySelector('#start');
-const $outer = document.querySelector('#outer');
-const $pixi_wrapper = document.querySelector('#pixi_wrapper');
-const $loading = document.querySelector('#loading');
-const $loadingAnim = document.querySelector('#loadingAnim');
-const $main = document.querySelector('#main');
-const $canModeValue = document.querySelector('#canModeValue');
-const $gameConnValue = document.querySelector('#gameConnValue');
-const $onebtnConnValue = document.querySelector('#onebtnConnValue');
-const $spongeConnValue = document.querySelector('#spongeConnValue');
-const $canConnValue = document.querySelector('#canConnValue');
-const $connectionValue = document.querySelector('#connectionValue');
-const $dtitle = document.querySelector('#dtitle');
+    <script type="module">
+      const $start = document.querySelector("#start");
+      const $outer = document.querySelector("#outer");
+      const $pixi_wrapper = document.querySelector("#pixi_wrapper");
+      const $loading = document.querySelector("#loading");
+      const $loadingAnim = document.querySelector("#loadingAnim");
+      const $main = document.querySelector("#main");
+      const $canModeValue = document.querySelector("#canModeValue");
+      const $gameConnValue = document.querySelector("#gameConnValue");
+      const $onebtnConnValue = document.querySelector("#onebtnConnValue");
+      const $spongeConnValue = document.querySelector("#spongeConnValue");
+      const $canConnValue = document.querySelector("#canConnValue");
+      const $connectionValue = document.querySelector("#connectionValue");
+      const $dtitle = document.querySelector("#dtitle");
 
-const $appleIcon = document.head.querySelector('link[rel="apple-touch-icon"]');
-const $icon = document.head.querySelector('link[rel="icon"]');
-const $logo = document.querySelector(".logo");
-const $dpig = document.querySelector("#dpig");
-const $usersValue = document.querySelector("#usersValue");
-const $userIcon = document.querySelector("#userIcon");
-const $userName = document.querySelector("#userName");
-//const $userScore = document.querySelector("#userScore");
+      const $appleIcon = document.head.querySelector('link[rel="apple-touch-icon"]');
+      const $icon = document.head.querySelector('link[rel="icon"]');
+      const $logo = document.querySelector(".logo");
+      const $dpig = document.querySelector("#dpig");
+      const $usersValue = document.querySelector("#usersValue");
+      const $userIcon = document.querySelector("#userIcon");
+      const $userName = document.querySelector("#userName");
+      //const $userScore = document.querySelector("#userScore");
 
-let param = location.search;
+      let param = location.search;
 
-$start.onclick = async (e) => {
-  $outer.classList.add("hide");
-  playEfx();
-  await requestWakeLock();
-};
+      $start.onclick = async (e) => {
+        $outer.classList.add("hide");
+        playEfx();
+        await requestWakeLock();
+      };
 
-document.onvisibilitychange = async (e) =>{
-  if(document.visibilityState == "hidden"){
-  }else if(document.visibilityState === 'visible'){
-  	if (wakeLock !== null){
+      document.onvisibilitychange = async (e) => {
+        if (document.visibilityState == "hidden") {
+        } else if (document.visibilityState === "visible") {
+          if (wakeLock !== null) {
+            await requestWakeLock();
+          }
+        }
+      };
+
+      let animTimer = null;
+      let kusoTimer = null;
+      const ANIM_TIME = 1000;
+
+      function startAnim(_index, mode) {
+        if (animTimer != null) {
+          clearTimeout(animTimer);
+          anim.removeFace();
+        }
+        let sindex = Math.floor(Math.random() * 16);
+        if (mode != undefined) {
+          smp2.playSoundOnly(null, sindex, 1);
+        } else {
+          smp2.play(null, sindex, 1);
+        }
+        anim.startBgLines();
+        anim.addFace(_index);
+        animTimer = setTimeout((e) => {
+          anim.stopBgLines();
+          anim.removeFace();
+          animTimer = null;
+        }, ANIM_TIME);
+      }
+
+      function startKuso(_index, mode) {
+        if (kusoTimer != null) {
+          clearTimeout(kusoTimer);
+          anim.removeKuso();
+        }
+        let sindex = Math.floor(Math.random() * 4);
+        if (mode != undefined) {
+          efx.playSoundOnly(null, sindex, 1);
+        } else {
+          efx.play(null, sindex, 1);
+        }
+        anim.startBgLines();
+        anim.addKuso(_index);
+        kusoTimer = setTimeout((e) => {
+          anim.stopBgLines();
+          anim.removeKuso();
+          kusoTimer = null;
+        }, ANIM_TIME);
+      }
+
+      ///////////////////////////////////////////////////////////////////////
+      // UI Efx
+      import posmp from "/libs/posmp2.mjs";
+
+      const sampler = new posmp();
+      await sampler.init("/wav/efx1.wav").catch((err) => null);
+
+      function playEfx(num) {
+        sampler.play();
+      }
+
+      import smp from "./ui/colabPlayer-cans.mjs";
+      let ac = new AudioContext();
+      const smp2 = new smp(ac);
+      await smp2.load();
+
+      import Efx from "./ui/efxPlayer.mjs";
+      const efx = new Efx(ac);
+      await efx.load();
+
+      ///////////////////////////////////////////////////////////////////////
+      // screen wake lock
+      let wakeLock = null;
+
+      const requestWakeLock = async () => {
+        try {
+          if (wakeLock != null) {
+            if (wakeLock.released == false) {
+              return;
+            }
+          }
+          wakeLock = await navigator.wakeLock.request("screen");
+          wakeLock.addEventListener("release", () => {
+            console.log("Screen Wake Lock was released");
+          });
+          console.log("Screen Wake Lock is active");
+        } catch (err) {
+          console.error(`${err.name}, ${err.message}`);
+        }
+      };
+
       await requestWakeLock();
-  	}
-  }
-}
 
-let animTimer = null;
-let kusoTimer = null;
-const ANIM_TIME = 1000;
+      ///////////////////////////////////////////////////////////////////////
+      // animation
 
-function startAnim(_index,mode){
-  if(animTimer != null){
-    clearTimeout(animTimer);
-    anim.removeFace();
-  }
-  let sindex = Math.floor(Math.random() * 16);
-  if(mode != undefined){
-    smp2.playSoundOnly(null,sindex,1);
-  }else{
-    smp2.play(null,sindex,1);
-  }
-  anim.startBgLines();
-  anim.addFace(_index);
-  animTimer = setTimeout((e)=>{
-    anim.stopBgLines();
-    anim.removeFace();
-    animTimer = null;
-  },ANIM_TIME);
-}
+      import animation from "./ui/animation-center.mjs";
 
-function startKuso(_index,mode){
-  if(kusoTimer != null){
-    clearTimeout(kusoTimer);
-    anim.removeKuso();
-  }
-  let sindex = Math.floor(Math.random() * 4);
-  if(mode != undefined){
-    efx.playSoundOnly(null,sindex,1);
-  }else{
-    efx.play(null,sindex,1);
-  }
-  anim.startBgLines();
-  anim.addKuso(_index);
-  kusoTimer = setTimeout((e)=>{
-    anim.stopBgLines();
-    anim.removeKuso();
-    kusoTimer = null;
-  },ANIM_TIME);
-}
+      const anim = new animation(ac);
+      await anim.init($pixi_wrapper);
 
+      window.addEventListener("resize", () => {
+        const width = $main.getBoundingClientRect().width;
+        const height = $main.getBoundingClientRect().height;
+        anim.resize(width, height);
+      });
 
-///////////////////////////////////////////////////////////////////////
-// UI Efx
-import posmp from "/libs/posmp2.mjs";
+      const observer = new MutationObserver(() => {
+        const width = $main.getBoundingClientRect().width;
+        const height = $main.getBoundingClientRect().height;
+        anim.resize(width, height);
+      });
+      observer.observe($main, {
+        attriblutes: true,
+        attributeFilter: ["style"],
+      });
 
-const sampler = new posmp();
-await sampler.init("/wav/efx1.wav").catch((err)=>null);
+      ///////////////////////////////////////////////////////////////////////
+      // 缶
+      import Cans from "/libs/canout.mjs";
+      const cans = new Cans();
+      await cans.init();
+      cans.setOnChange(onChangeCans);
+      onChangeCans(cans.getDevices());
 
-function playEfx(num){
-  sampler.play();
-}
-
-import smp from "./ui/colabPlayer-cans.mjs";
-let ac = new AudioContext();
-const smp2 = new smp(ac);
-await smp2.load();
-
-import Efx from "./ui/efxPlayer.mjs";
-const efx = new Efx(ac);
-await efx.load();
-
-///////////////////////////////////////////////////////////////////////
-// screen wake lock
-let wakeLock = null;
-
-const requestWakeLock = async () => {
-  try {
-    if(wakeLock != null){
-      if(wakeLock.released == false){
-        return;
+      function onChangeCans(cans) {
+        if (cans.length == 0) {
+          $canConnValue.innerHTML = "❌";
+          $canConnValue.classList.remove("connected");
+        } else {
+          $canConnValue.innerHTML = "⭕️";
+          $canConnValue.classList.add("connected");
+        }
       }
-    }
-    wakeLock = await navigator.wakeLock.request('screen');
-    wakeLock.addEventListener('release', () => {
-      console.log('Screen Wake Lock was released');
-    });
-    console.log('Screen Wake Lock is active');
-  } catch (err) {
-    console.error(`${err.name}, ${err.message}`);
-  }
-};
 
-await requestWakeLock();
+      ///////////////////////////////////////////////////////////////////////
+      // スポンジ
+      import Sponge from "/libs/spongeMIDI.mjs";
+      const sponge = new Sponge();
+      await sponge.init();
+      sponge.setOnChange(onChangeSponge);
+      sponge.setOnSponge(onSponge);
+      onChangeSponge(sponge.getDevices());
 
-///////////////////////////////////////////////////////////////////////
-// animation
-
-import animation from "./ui/animation-center.mjs";
-
-const anim = new animation(ac);
-await anim.init($pixi_wrapper);
-
-window.addEventListener('resize', ()=>{
-  const width = $main.getBoundingClientRect().width;
-  const height = $main.getBoundingClientRect().height;
-  anim.resize(width, height);
-});
-
-const observer = new MutationObserver(() => {
-  const width = $main.getBoundingClientRect().width;
-  const height = $main.getBoundingClientRect().height;
-  anim.resize(width, height);
-});
-observer.observe($main, {
-  attriblutes: true,
-  attributeFilter: ["style"]
-});
-
-///////////////////////////////////////////////////////////////////////
-// 缶
-import Cans from "/libs/canout.mjs";
-const cans = new Cans();
-await cans.init();
-cans.setOnChange(onChangeCans);
-onChangeCans(cans.getDevices());
-
-function onChangeCans(cans){
-  if(cans.length == 0){
-    $canConnValue.innerHTML = "❌";
-    $canConnValue.classList.remove("connected");
-  }else{
-    $canConnValue.innerHTML = "⭕️";
-    $canConnValue.classList.add("connected");
-  }
-}
-
-///////////////////////////////////////////////////////////////////////
-// スポンジ
-import Sponge from "/libs/spongeMIDI.mjs";
-const sponge = new Sponge();
-await sponge.init();
-sponge.setOnChange(onChangeSponge);
-sponge.setOnSponge(onSponge);
-onChangeSponge(sponge.getDevices());
-
-function onChangeSponge(sponges){
-  if(sponges.length == 0){
-    $spongeConnValue.innerHTML = "❌";
-    $spongeConnValue.classList.remove("connected");
-  }else{
-    $spongeConnValue.innerHTML = "⭕️";
-    $spongeConnValue.classList.add("connected");
-  }
-}
-
-function onSponge(val){
-
-  const base = (40>val)? val : -val;
-  const score = base*(Math.floor(Math.random()*50));
-  console.log("onSponge() val="+val+" score="+score);
-
-  fire(score,0);
-}
-
-///////////////////////////////////////////////////////////////////////
-// onebtn
-import OneBtn from "/libs/onebutton.mjs";
-let btn = new OneBtn();
-btn.setOnChange(onBtnChange);
-btn.setOnButton(onBtnButton);
-btn = await btn.init();
-
-if(btn == null){
-  $onebtnConnValue.innerHTML = "-";
-}else{
-  $onebtnConnValue.innerHTML = "?";
-}
-
-function onBtnChange(deviceNames){
-  if(deviceNames.length > 0){
-    $onebtnConnValue.innerHTML = "⭕️";
-    $onebtnConnValue.classList.add("connected");
-  }else{
-    $onebtnConnValue.innerHTML = "❌";
-    $onebtnConnValue.classList.remove("connected");
-  }
-}
-
-function onBtnButton(num,val,device){
-  console.log("onBtnButton  ["+num+"]="+val);
-  if(num == 110){
-    let index = Math.floor(Math.random() * 16);
-    startAnim((index%8)+1);
-    if(anim.game.getStatus() == 2){ // playing
-      let multi =0;
-      switch(index){
-      case 0:  multi =  5; break;
-      case 1:  multi =  7; break;
-      case 2:  multi = 10; break;
-      case 3:  multi = 15; break;
-      case 4:  multi = 20; break;
-      case 5:  multi = 25; break;
-      case 6:  multi = 30; break;
-      case 7:  multi = 35; break;
-      case 8:  multi = 40; break;
-      case 9:  multi = 50; break;
-      case 10: multi = 60; break;
-      case 11: multi = 70; break;
-      case 12: multi = 80; break;
-      case 13: multi = 90; break;
-      case 14: multi = 100; break;
-      case 15: multi = 200; break;
+      function onChangeSponge(sponges) {
+        if (sponges.length == 0) {
+          $spongeConnValue.innerHTML = "❌";
+          $spongeConnValue.classList.remove("connected");
+        } else {
+          $spongeConnValue.innerHTML = "⭕️";
+          $spongeConnValue.classList.add("connected");
+        }
       }
-      const score = Math.floor(multi * Math.random() * 2);
-      anim.game.addScore(score,"center");
-    }
-    if(anim.game.getStatus() == 0){
-      smp2.play(null,index,1);
-    }else{
-      smp2.playSoundOnly(null,index,1);
-    }
-  }
-}
 
+      function onSponge(val) {
+        const base = 40 > val ? val : -val;
+        const score = base * Math.floor(Math.random() * 50);
+        console.log("onSponge() val=" + val + " score=" + score);
 
-///////////////////////////////////////////////////////////////////////
-// WebSocket
-import {io} from "/libs/socket.io.esm.min.js";
+        fire(score, 0);
+      }
 
-const socket = io({transports:["websocket"],path:"/ws"});
+      ///////////////////////////////////////////////////////////////////////
+      // onebtn
+      import OneBtn from "/libs/onebutton.mjs";
+      let btn = new OneBtn();
+      btn.setOnChange(onBtnChange);
+      btn.setOnButton(onBtnButton);
+      btn = await btn.init();
 
-socket.on("connect", async () => {
-  console.log("socket connected :"+socket.id);
-  $connectionValue.innerHTML = "⭕️";
-  socket.emit("master","kuso");
-  $connectionValue.classList.add("connected");
-});
+      if (btn == null) {
+        $onebtnConnValue.innerHTML = "-";
+      } else {
+        $onebtnConnValue.innerHTML = "?";
+      }
 
-socket.on("disconnect", () => {
-  console.log("socket disconnected");
-  $connectionValue.innerHTML = "❌";
-  $connectionValue.classList.remove("connected");
-});
+      function onBtnChange(deviceNames) {
+        if (deviceNames.length > 0) {
+          $onebtnConnValue.innerHTML = "⭕️";
+          $onebtnConnValue.classList.add("connected");
+        } else {
+          $onebtnConnValue.innerHTML = "❌";
+          $onebtnConnValue.classList.remove("connected");
+        }
+      }
 
-socket.on("push", (data)=>{
-  console.log("push received!");
-  anim.users.addUser(data);
-  if(anim.game.getStatus() == 2){
-    anim.game.addScore(data.score,"guest");
-  }
-  let sindex = Math.floor(Math.random() * 16);
-  if(anim.game.getStatus() == 0){
-    smp2.play(null,sindex,1);
-  }else{
-    smp2.playSoundOnly(null,sindex,1);
-  }
-});
+      function onBtnButton(num, val, device) {
+        console.log("onBtnButton  [" + num + "]=" + val);
+        if (num == 110) {
+          let index = Math.floor(Math.random() * 16);
+          startAnim((index % 8) + 1);
+          if (anim.game.getStatus() == 2) {
+            // playing
+            let multi = 0;
+            switch (index) {
+              case 0:
+                multi = 5;
+                break;
+              case 1:
+                multi = 7;
+                break;
+              case 2:
+                multi = 10;
+                break;
+              case 3:
+                multi = 15;
+                break;
+              case 4:
+                multi = 20;
+                break;
+              case 5:
+                multi = 25;
+                break;
+              case 6:
+                multi = 30;
+                break;
+              case 7:
+                multi = 35;
+                break;
+              case 8:
+                multi = 40;
+                break;
+              case 9:
+                multi = 50;
+                break;
+              case 10:
+                multi = 60;
+                break;
+              case 11:
+                multi = 70;
+                break;
+              case 12:
+                multi = 80;
+                break;
+              case 13:
+                multi = 90;
+                break;
+              case 14:
+                multi = 100;
+                break;
+              case 15:
+                multi = 200;
+                break;
+            }
+            const score = Math.floor(multi * Math.random() * 2);
+            anim.game.addScore(score, "center");
+          }
+          if (anim.game.getStatus() == 0) {
+            smp2.play(null, index, 1);
+          } else {
+            smp2.playSoundOnly(null, index, 1);
+          }
+        }
+      }
 
-socket.on("clients", (num)=>{
-  console.log("clients="+num);
-  $usersValue.innerHTML = num; // master なので -1 しない
-});
+      ///////////////////////////////////////////////////////////////////////
+      // WebSocket
+      import { io } from "/libs/socket.io.esm.min.js";
 
-///////////////////////////////////////////////////////////////////////
-// Ranking UI
-import uiRank from "./ui/ui-ranking-center.mjs";
-const uirank = new uiRank($main,socket,"master");
-await uirank.init();
+      const socket = io({ transports: ["websocket"], path: "/ws" });
 
-///////////////////////////////////////////////////////////////////////
-// bg image loader
-import bgimage from "./ui/bgimageloader.mjs";
-const imgLoader = new bgimage($pixi_wrapper);
-await imgLoader.load();
+      socket.on("connect", async () => {
+        console.log("socket connected :" + socket.id);
+        $connectionValue.innerHTML = "⭕️";
+        socket.emit("master", "kuso");
+        $connectionValue.classList.add("connected");
+      });
 
-///////////////////////////////////////////////////////////////////////
-// Gamepad
-import "/libs/joypad.min.js";
+      socket.on("disconnect", () => {
+        console.log("socket disconnected");
+        $connectionValue.innerHTML = "❌";
+        $connectionValue.classList.remove("connected");
+      });
 
-joypad.on("connect",(e)=>{
-  console.log("gamepad connected! name="+e.gamepad.id);
-  $gameConnValue.innerHTML = "⭕️";
-  $gameConnValue.classList.add("connected");
-});
-joypad.on("disconnect",(e)=>{
-  console.log("gamepad disconnected! name="+e.gamepad.id);
-  $gameConnValue.innerHTML = "❌";
-  $gameConnValue.classList.remove("connected");
-});
-joypad.on("button_press",(e)=>{
-  const button = e.detail.buttonName;
-  let index = null;
-  console.log("gamepad press="+button);
-  switch(button){
-  case "button_0":  index = 1; break;
-  case "button_1":  index = 2; break;
-  case "button_2":  index = 3; break;
-  case "button_3":  index = 4; break;
-  case "button_12": index = 5; break;
-  case "button_13": index = 6; break;
-  case "button_14": index = 7; break;
-  case "button_15": index = 8; break;
-  }
-  if(index != null){
-    startAnim(index);
-    if(anim.game.getStatus() == 2){
-      const score = Math.floor(Math.random()*40);
-      anim.game.addScore(score,"center");
-    }
-  }
+      socket.on("push", (data) => {
+        console.log("push received!");
+        anim.users.addUser(data);
+        if (anim.game.getStatus() == 2) {
+          anim.game.addScore(data.score, "guest");
+        }
+        let sindex = Math.floor(Math.random() * 16);
+        if (anim.game.getStatus() == 0) {
+          smp2.play(null, sindex, 1);
+        } else {
+          smp2.playSoundOnly(null, sindex, 1);
+        }
+      });
 
-});
+      socket.on("clients", (num) => {
+        console.log("clients=" + num);
+        $usersValue.innerHTML = num; // master なので -1 しない
+      });
 
-///////////////////////////////////////////////////////////////////////
-// for game socket
-anim.game.setSocket(socket);
-anim.game.setOnGameStatusChange(onGameStatusChange);
+      ///////////////////////////////////////////////////////////////////////
+      // Ranking UI
+      import uiRank from "./ui/ui-ranking-center.mjs";
+      const uirank = new uiRank($main, socket, "master");
+      await uirank.init();
 
-///////////////////////////////////////////////////////////////////////
-// Loading Completed
+      ///////////////////////////////////////////////////////////////////////
+      // bg image loader
+      import bgimage from "./ui/bgimageloader.mjs";
+      const imgLoader = new bgimage($pixi_wrapper);
+      await imgLoader.load();
 
-$loading.innerHTML = "ロードがおわりました！ <br>下のボタンを押してね！ ↓↓↓";
-$start.classList.remove("hide");
-$loadingAnim.classList.add("hide");
+      ///////////////////////////////////////////////////////////////////////
+      // Gamepad
+      import "/libs/joypad.min.js";
 
-///////////////////////////////////////////////////////////////////////
-// Key Event
-document.body.onkeydown = function(ev){
-  console.log("keydown: "+ev.keyCode);
-  switch(ev.keyCode){
-  case 32: $start.click();  break;  // space
-  case 48: testFire();  break;  // 0
-  case 49: gameStart(); break;  // 1
-  case 50: ; break; // 2
-  case 51: ; break; // 3
-  case 52: ; break; // 4
-  case 53: ; break; // 5
-  case 67: toggleCanMode(); break; // c
-  case 69: resetGame(); break; // e
-  case 82: uirank.click(); break; // r
-  default:break;
-  }
-}
+      joypad.on("connect", (e) => {
+        console.log("gamepad connected! name=" + e.gamepad.id);
+        $gameConnValue.innerHTML = "⭕️";
+        $gameConnValue.classList.add("connected");
+      });
+      joypad.on("disconnect", (e) => {
+        console.log("gamepad disconnected! name=" + e.gamepad.id);
+        $gameConnValue.innerHTML = "❌";
+        $gameConnValue.classList.remove("connected");
+      });
+      joypad.on("button_press", (e) => {
+        const button = e.detail.buttonName;
+        let index = null;
+        console.log("gamepad press=" + button);
+        switch (button) {
+          case "button_0":
+            index = 1;
+            break;
+          case "button_1":
+            index = 2;
+            break;
+          case "button_2":
+            index = 3;
+            break;
+          case "button_3":
+            index = 4;
+            break;
+          case "button_12":
+            index = 5;
+            break;
+          case "button_13":
+            index = 6;
+            break;
+          case "button_14":
+            index = 7;
+            break;
+          case "button_15":
+            index = 8;
+            break;
+        }
+        if (index != null) {
+          startAnim(index);
+          if (anim.game.getStatus() == 2) {
+            const score = Math.floor(Math.random() * 40);
+            anim.game.addScore(score, "center");
+          }
+        }
+      });
 
-function toggleCanMode(){
-  if(smp2.canMode){
-    smp2.setCanMode(false);
-    $canModeValue.innerHTML = "停止";
-  }else{
-    smp2.setCanMode(true);
-    $canModeValue.innerHTML = "出力";
-  }
-}
+      ///////////////////////////////////////////////////////////////////////
+      // for game socket
+      anim.game.setSocket(socket);
+      anim.game.setOnGameStatusChange(onGameStatusChange);
 
-function gameStart(){
-  if(anim.game.getStatus() == 0){
-    anim.game.start();
-  }
-}
+      ///////////////////////////////////////////////////////////////////////
+      // Loading Completed
 
-function testFire(){
-  const score = Math.floor(Math.random()*60);
-  fire(score);
-}
+      $loading.innerHTML = "ロードがおわりました！ <br>下のボタンを押してね！ ↓↓↓";
+      $start.classList.remove("hide");
+      $loadingAnim.classList.add("hide");
 
-function fire(score,index){
-  if(score >= 0){
-    if(index == undefined){
-      index = (score % 8)+1;
-    }
-    startAnim(index);
-  }else{
-    if(index == undefined){
-      index = (score % 3);
-    }
-    startKuso(index);
-  }
-  if(anim.game.getStatus() == 2){
-    anim.game.addScore(score,"center");
-  }
-}
+      ///////////////////////////////////////////////////////////////////////
+      // Key Event
+      document.body.onkeydown = function (ev) {
+        console.log("keydown: " + ev.keyCode);
+        switch (ev.keyCode) {
+          case 32:
+            $start.click();
+            break; // space
+          case 48:
+            testFire();
+            break; // 0
+          case 49:
+            gameStart();
+            break; // 1
+          case 50:
+            break; // 2
+          case 51:
+            break; // 3
+          case 52:
+            break; // 4
+          case 53:
+            break; // 5
+          case 67:
+            toggleCanMode();
+            break; // c
+          case 69:
+            resetGame();
+            break; // e
+          case 82:
+            uirank.click();
+            break; // r
+          default:
+            break;
+        }
+      };
 
-async function resetGame(){
-  anim.game.endSession();
-  await imgLoader.load();
-}
+      function toggleCanMode() {
+        if (smp2.canMode) {
+          smp2.setCanMode(false);
+          $canModeValue.innerHTML = "停止";
+        } else {
+          smp2.setCanMode(true);
+          $canModeValue.innerHTML = "出力";
+        }
+      }
 
-function onGameStatusChange(e){
-  switch(e.status){
-  case 1:
-    uirank.hide();
-    break;
-  case 3:
-    uirank.updateCenterScores(e.scores);
-    break;
-  case 4:
-    uirank.show();
-    break;
-  default:
-    break;
-  }
-}
+      function gameStart() {
+        if (anim.game.getStatus() == 0) {
+          anim.game.start();
+        }
+      }
 
-</script>
-</body>
+      function testFire() {
+        const score = Math.floor(Math.random() * 60);
+        fire(score);
+      }
+
+      function fire(score, index) {
+        if (score >= 0) {
+          if (index == undefined) {
+            index = (score % 8) + 1;
+          }
+          startAnim(index);
+        } else {
+          if (index == undefined) {
+            index = score % 3;
+          }
+          startKuso(index);
+        }
+        if (anim.game.getStatus() == 2) {
+          anim.game.addScore(score, "center");
+        }
+      }
+
+      async function resetGame() {
+        anim.game.endSession();
+        await imgLoader.load();
+      }
+
+      function onGameStatusChange(e) {
+        switch (e.status) {
+          case 1:
+            uirank.hide();
+            break;
+          case 3:
+            uirank.updateCenterScores(e.scores);
+            break;
+          case 4:
+            uirank.show();
+            break;
+          default:
+            break;
+        }
+      }
+    </script>
+  </body>
 </html>
