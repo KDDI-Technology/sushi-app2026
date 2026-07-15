@@ -11,7 +11,7 @@ const samples = [
   { path: "/wav/voices/1.wav", tags: ["1"] },
   { path: "/wav/voices/start.wav", tags: ["0", "start"] },
   { path: "/wav/voices/owari.wav", tags: ["owari", "end"] },
-  { path: "/wav/voices/sushi_whistle.mp3", tags: ["whistle", "fue"] },
+  { path: "/wav/voices/sushi_whistle1.mp3", tags: ["whistle", "fue"] },
   { path: "/wav/voices/sushi_whistle2.mp3", tags: ["whistle2", "fue2"] },
 ];
 
