@@ -13,6 +13,7 @@ let CONTENT_HEIGHT = window.innerHeight;
 const BEAT_EFFECT_MAX = 12;
 
 const faces = [
+  "/img/nizi_sushi.png",
   "/img/sushi/00.png",
   "/img/sushi/01.png",
   "/img/sushi/02.png",
