@@ -23,7 +23,12 @@ const faces = [
   "/img/sushi/07.png",
 ];
 
-const kusos = ["/img/kuso/kuso1.png", "/img/kuso/kuso2.png", "/img/kuso/kuso3.png"];
+const kusos = [
+  "/img/kuso/kuso1.png",
+  "/img/kuso/kuso2.png",
+  "/img/kuso/kuso3.png",
+  "/img/sushi/08.png",
+];
 
 const BG_LINES = 48;
 const MAX_BG_TICKS = 120;

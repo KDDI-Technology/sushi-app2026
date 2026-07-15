@@ -1,7 +1,7 @@
 import * as PIXI from "/libs/pixi.min-v6.2.1.mjs";
 import MIDI from "/libs/pomidi.mjs";
 
-const CHICKEN_IMAGE = "/img/chicken.png";
+const CHICKEN_IMAGE = "/img/yaki_chicken.png";
 
 const DEB = false;
 
