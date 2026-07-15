@@ -6,12 +6,7 @@ import Cans from "/libs/canout.mjs";
 
 const DEB = false;
 
-const samples = [
-  "/wav/efx/hyoshigi1.mp3",
-  "/wav/efx/hyoshigi2.mp3",
-  "/wav/efx/kodutsumi.mp3",
-  "/wav/efx/wadaiko.mp3",
-];
+const samples = ["/wav/efx/1.mp3", "/wav/efx/2.mp3", "/wav/efx/3.mp3"];
 
 const VELOCITY = 1.4;
 
