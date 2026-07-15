@@ -11,9 +11,6 @@ const faces = [
   "/img/sushi/05.png",
   "/img/sushi/06.png",
   "/img/sushi/07.png",
-  "/img/sushi/08.png",
-  "/img/sushi/09.png",
-  "/img/sushi/10.png",
 ];
 
 class userAnimation {

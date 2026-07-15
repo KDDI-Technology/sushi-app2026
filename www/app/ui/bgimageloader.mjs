@@ -3,7 +3,13 @@
 // (C)2026 by KDDI Technology
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
-const imageUrls = ["/img/bg/umi.jpeg", "/img/bg/itamae.jpeg"];
+const imageUrls = [
+  "/img/bg/bg1_1920x1080.jpeg",
+  "/img/bg/bg2_1920x1080.jpeg",
+  "/img/bg/bg3_1920x1080.jpeg",
+  "/img/bg/bg4_1920x1080.jpeg",
+  "/img/bg/bg5_1920x1080.jpeg",
+];
 
 class bgImageLoader {
   constructor(dom) {

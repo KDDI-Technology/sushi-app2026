@@ -4,6 +4,7 @@
 // Programmed by H.Kodama (D.F.Mac.@TripArts Music)
 
 const imageUrls = [
+  "/img/sushi/00.png",
   "/img/sushi/01.png",
   "/img/sushi/02.png",
   "/img/sushi/03.png",
@@ -12,8 +13,6 @@ const imageUrls = [
   "/img/sushi/06.png",
   "/img/sushi/07.png",
   "/img/sushi/08.png",
-  "/img/sushi/09.png",
-  "/img/sushi/10.png",
 ];
 
 class titleImageLoader {
