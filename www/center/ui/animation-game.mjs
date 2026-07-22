@@ -365,7 +365,7 @@ class game {
   }
   async startResult() {
     this.status = 3;
-    this.voices.playTag(null, "whistle", 0.6);
+    this.voices.playTag(null, "whistle3", 0.6);
     this.resScoreText.text = this.score + " pt";
     this.tickCount = 0;
     let _scores = null;

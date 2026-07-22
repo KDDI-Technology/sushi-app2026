@@ -13,6 +13,7 @@ const samples = [
   { path: "/wav/voices/owari.wav", tags: ["owari", "end"] },
   { path: "/wav/voices/sushi_whistle1.mp3", tags: ["whistle", "fue"] },
   { path: "/wav/voices/sushi_whistle2.mp3", tags: ["whistle2", "fue2"] },
+  { path: "/wav/voices/sushi_whistle3.mp3", tags: ["whistle3", "fue3"] },
 ];
 
 // tag（別名）から samples のインデックスを引くマップ
